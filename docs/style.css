@@ -1,0 +1,185 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background-color: #292b2b;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h2 {
+    margin: 10px 0 10px 80px;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(to left, #90eeff 0%, #4dacff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: left;
+}
+input {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+.gameCont {
+    display: flex;
+    flex-direction: column;
+    font-size: medium;
+    width: fit-content;
+}
+.pasteItems, .fieldItems {
+    margin-top: 12px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+}
+.button {
+    width: 60px;
+    background-color: #1c5d88;
+    border: 2px solid #1f2937;
+    color: #131e28;
+    font-weight: bolder;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.button:active {
+    background-color: #7d86b2;
+    color: #343539;
+}
+.pasteItems input {
+    background-color: transparent;
+    border: 2px solid #6a7075;
+    color: #cfcfcf;
+    width: 170px;
+    margin-right: 5px;
+}
+.fieldItems input {
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 2px solid #6a7075;
+    color: #cfcfcf;
+    width: 50px;
+    margin-right: 5px;
+    text-align: center;
+}
+
+.pasteItems input:focus, .fieldItems input:focus {
+    outline: none;
+}
+
+.grid-outercont {
+    background-color: #c0c0c0;
+    border-left: 6px solid #ffffff;
+    border-top: 6px solid #ffffff;
+    border-bottom: 6px solid #808080;
+    border-right: 6px solid #808080;
+    margin: 20px;
+    padding: 10px;
+}
+.grid-innercont {
+    border-left: 6px solid #808080;
+    border-top: 6px solid #808080;
+    border-bottom: 6px solid #ffffff;
+    border-right: 6px solid #ffffff;
+}
+
+@font-face {
+    font-family: 'Minesweeper';
+    src: url('fonts/mine-sweeper.otf');
+}
+.grid {
+    display: grid;
+    user-select: none;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+}
+.cell {
+    width: 25px;
+    height: 25px;
+    background-color: #c6c6c6;
+    border: 1px solid #808080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cell span {
+    font-family: 'Minesweeper';
+    font-size: 15px;
+    font-weight: 500;
+    padding-left: 1px;
+}
+.cell span.cell1 {
+    color: #0000f7;
+}
+.cell span.cell2 {
+    color: #007700;
+}
+.cell span.cell3 {
+    color: #ec0000;
+}
+.cell span.cell4 {
+    color: #000080;
+}
+.cell span.cell5 {
+    color: #800000;
+}
+.cell span.cell6 {
+    color: #337675;
+}
+.cell span.cell7 {
+    color: #000000;
+}
+.cell span.cell8 {
+    color: #777777;
+}
+.cell span.cell9, span.cellprob {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 800;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+.cell:has(span.cell10, span.cell11, span.cell12) {
+    background-image: url('img/flagicon.svg');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.cell:has(span.cell9, span.cell11, span.cellprob) {
+    background-color: #c6c6c6;
+    border-left: 3px solid #ffffff;
+    border-top: 3px solid #ffffff;
+    border-bottom: 3px solid #808080;
+    border-right: 3px solid #808080;
+}
+.cell:has(span.cell11, span.cell12) {
+    background-color: #ff5656;
+}
+.cell span.cellprob {
+    color: rgb(54, 54, 54);
+    font-weight: 700;
+    font-size: 12px;
+}
+.cell:has(span.zeroprob) {
+    background-color: #4eff89;
+}
+.cell span.flprob {
+    color: #888888;
+}
+.cell span.lowprob {
+    color: #557700;
+}
+.cell span.medprob {
+    color: #aa5500;
+}
+.cell span.highprob {
+    color: #dd0000;
+}

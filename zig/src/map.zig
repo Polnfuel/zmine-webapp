@@ -12,17 +12,12 @@ pub const miniset16 = struct {
     size: u8,
 
     pub fn has(self: *miniset16, value: u16) bool {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.data[i] == value) {
+        for (self.data[0..self.size]) |elem| {
+            if (elem == value) {
                 return true;
             }
         }
         return false;
-    }
-
-    pub fn at(self: *const miniset16, index: usize) u16 {
-        return self.data[index];
     }
 
     pub fn ins(self: *miniset16, value: u16) void {
@@ -51,9 +46,8 @@ pub const mapvec64 = struct {
     }
 
     pub fn empty(self: mapvec64) bool {
-        var i: usize = 0;
-        while (i < self.array.len) : (i += 1) {
-            if (self.array[i] != null) {
+        for (self.array) |v| {
+            if (v != null) {
                 return false;
             }
         }
@@ -69,22 +63,18 @@ pub const mapvec64 = struct {
     }
 
     pub fn first(self: mapvec64) u8 {
-        var i: usize = 0;
-        while (i < self.array.len) : (i += 1) {
-            if (self.array[i] != null) {
+        for (self.array, 0..self.array.len) |v, i| {
+            if (v) |_| {
                 return @truncate(i);
             }
         }
         unreachable;
     }
 
-    pub fn free(self: *mapvec64) void {
-        var i: usize = 0;
-        while (i < self.array.len) : (i += 1) {
-            const p = self.array[i];
-            if (p != null) {
-                const pp = p.?;
-                allocator.free(pp.array);
+    pub fn free(self: *const mapvec64) void {
+        for (self.array) |opt_v| {
+            if (opt_v) |v| {
+                allocator.free(v.array);
             }
         }
         allocator.free(self.array);
@@ -129,9 +119,7 @@ pub const vecmapvec64 = struct {
     }
 
     pub fn free(self: *vecmapvec64) void {
-        var i: usize = 0;
-        while (i < self.array.len) : (i += 1) {
-            var map = self.array[i];
+        for (self.array) |map| {
             map.free();
         }
 
@@ -146,10 +134,6 @@ pub const set16 = struct {
     pub fn new(init_cap: usize) !set16 {
         const arr = try allocator.alloc(u16, init_cap);
         return set16{ .array = arr, .size = 0 };
-    }
-
-    pub fn at(self: set16, index: usize) u16 {
-        return self.array[index];
     }
 
     fn realloc(self: *set16, new_size: usize) !void {
@@ -176,9 +160,8 @@ pub const set16 = struct {
     }
 
     pub fn has(self: set16, value: u16) bool {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.array[i] == value) {
+        for (self.array[0..self.size]) |elem| {
+            if (elem == value) {
                 return true;
             }
         }
@@ -223,9 +206,8 @@ pub const set64 = struct {
     }
 
     pub fn has(self: set64, value: u64) bool {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.array[i] == value) {
+        for (self.array[0..self.size]) |elem| {
+            if (elem == value) {
                 return true;
             }
         }
@@ -270,9 +252,8 @@ pub const set128 = struct {
     }
 
     pub fn has(self: set128, value: u128) bool {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.array[i] == value) {
+        for (self.array[0..self.size]) |elem| {
+            if (elem == value) {
                 return true;
             }
         }

@@ -20,14 +20,22 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    const stl = b.addModule("stl", .{ .root_source_file = b.path("src/stl.zig"), .target = target, .imports = &.{
-        .{ .name = "vec", .module = vec },
-        .{ .name = "map", .module = map },
-    } });
+    const stl = b.addModule("stl", .{
+        .root_source_file = b.path("src/stl.zig"),
+        .target = target,
+        .imports = &.{
+            .{ .name = "vec", .module = vec },
+            .{ .name = "map", .module = map },
+        },
+    });
 
-    const probs = b.addModule("probs", .{ .root_source_file = b.path("src/probs.zig"), .target = target, .imports = &.{
-        .{ .name = "stl", .module = stl },
-    } });
+    const probs = b.addModule("probs", .{
+        .root_source_file = b.path("src/probs.zig"),
+        .target = target,
+        .imports = &.{
+            .{ .name = "stl", .module = stl },
+        },
+    });
 
     const exe = b.addExecutable(.{
         .name = "mine-prob",

@@ -39,17 +39,8 @@ pub const vec8 = struct {
 pub const vec16 = struct {
     array: []u16,
 
-    pub fn new(size: usize) !vec16 {
-        const arr = try allocator.alloc(u16, size);
-        return vec16{ .array = arr };
-    }
-
     pub fn at(self: vec16, index: usize) u16 {
         return self.array[index];
-    }
-
-    pub fn set(self: vec16, index: usize, value: u16) void {
-        self.array[index] = value;
     }
 
     pub fn next(self: vec16, current: u16) u16 {
@@ -59,10 +50,6 @@ pub const vec16 = struct {
             }
         }
         unreachable;
-    }
-
-    pub fn free(self: vec16) void {
-        allocator.free(self.array);
     }
 };
 
@@ -185,37 +172,6 @@ pub const vecneis = struct {
     }
 };
 
-pub const dvec8 = struct {
-    array: []u8,
-    size: usize,
-
-    pub fn new(init_cap: usize) !dvec8 {
-        const arr = try allocator.alloc(u8, init_cap);
-        return dvec8{ .array = arr, .size = 0 };
-    }
-
-    pub fn at(self: dvec8, index: usize) u8 {
-        return self.array[index];
-    }
-
-    pub fn realloc(self: *dvec8, new_size: usize) !void {
-        const new_arr: []u8 = try allocator.realloc(self.array, new_size);
-        self.array = new_arr;
-    }
-
-    pub fn add(self: *dvec8, value: u8) void {
-        if (self.size >= self.array.len) {
-            self.realloc(self.array.len * 2 + 1);
-        }
-        self.array[self.size] = value;
-        self.size += 1;
-    }
-
-    pub fn free(self: dvec8) void {
-        allocator.free(self.array);
-    }
-};
-
 pub const dvec16 = struct {
     array: []u16,
     size: usize,
@@ -243,9 +199,8 @@ pub const dvec16 = struct {
     }
 
     pub fn has(self: dvec16, value: u16) bool {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.array[i] == value) {
+        for (self.array[0..self.size]) |elem| {
+            if (elem == value) {
                 return true;
             }
         }
@@ -253,9 +208,8 @@ pub const dvec16 = struct {
     }
 
     pub fn index_of(self: dvec16, value: u16) usize {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            if (self.array[i] == value) {
+        for (self.array[0..self.size], 0..self.size) |elem, i| {
+            if (elem == value) {
                 return i;
             }
         }
@@ -280,10 +234,6 @@ pub const dvec64 = struct {
         return dvec64{ .array = arr, .size = 0 };
     }
 
-    pub fn at(self: dvec64, index: usize) u64 {
-        return self.array[index];
-    }
-
     pub fn realloc(self: *dvec64, new_size: usize) !void {
         const new_arr: []u64 = try allocator.realloc(self.array, new_size);
         self.array = new_arr;
@@ -296,15 +246,6 @@ pub const dvec64 = struct {
         self.array[self.size] = value;
         self.size += 1;
     }
-
-    pub fn has(self: dvec64, value: u64) bool {
-        for (self.array, 0..self.size) |_, i| {
-            if (self.array[i] == value) {
-                return true;
-            }
-        }
-        return false;
-    }
 };
 
 pub const dvec128 = struct {
@@ -314,10 +255,6 @@ pub const dvec128 = struct {
     pub fn new(init_cap: usize) !dvec128 {
         const arr = try allocator.alloc(u128, init_cap);
         return dvec128{ .array = arr, .size = 0 };
-    }
-
-    pub fn at(self: dvec128, index: usize) u128 {
-        return self.array[index];
     }
 
     pub fn realloc(self: *dvec128, new_size: usize) !void {
@@ -331,15 +268,6 @@ pub const dvec128 = struct {
         }
         self.array[self.size] = value;
         self.size += 1;
-    }
-
-    pub fn has(self: dvec128, value: u128) bool {
-        for (self.array, 0..self.size) |_, i| {
-            if (self.array[i] == value) {
-                return true;
-            }
-        }
-        return false;
     }
 };
 
@@ -382,10 +310,6 @@ pub const dvecpair16_8 = struct {
     pub fn new(init_cap: usize) !dvecpair16_8 {
         const arr = try allocator.alloc(pair16_8, init_cap);
         return dvecpair16_8{ .array = arr, .size = 0 };
-    }
-
-    pub fn at(self: dvecpair16_8, index: usize) pair16_8 {
-        return self.array[index];
     }
 
     pub fn realloc(self: *dvecpair16_8, new_size: usize) !void {
@@ -464,9 +388,7 @@ pub const dvecpairdvec16_dvecpair16_8 = struct {
     }
 
     pub fn free(self: *dvecpairdvec16_dvecpair16_8) void {
-        var i: usize = 0;
-        while (i < self.size) : (i += 1) {
-            const pair = self.array[i];
+        for (self.array[0..self.size]) |pair| {
             allocator.free(pair.first.array);
             allocator.free(pair.second.array);
         }
